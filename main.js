@@ -1,9 +1,9 @@
-const {app, BrowserWindow, screen, Menu, shell, ipcMain } = require('electron');
+const { app, BrowserWindow, screen, Menu, shell, ipcMain } = require( 'electron' );
 
 
 // config
 let meinFenster;
-let myHeight , myWidth, myX, myY;
+let myHeight, myWidth, myX, myY;
 const DEVMODE = true;
 
 let meinMenu = [
@@ -22,7 +22,7 @@ let meinMenu = [
     },
     {
         label:'Home', click:() => {
-            meinFenster.loadFile('views/index.html'); // ???
+            meinFenster.loadFile( 'views/index.html' ); // ???
             shell.beep();
         }
     },
@@ -38,9 +38,9 @@ let meinMenu = [
 
 const starteApplikation = () => {
     let factor = screen.getAllDisplays();
-    myHeight = factor[1].size.height;
+    myHeight = factor[ 1 ].size.height;
     myWidth = 600;
-    myX = factor[1].size.width - myWidth;
+    myX = factor[ 1 ].size.width - myWidth;
     myY = 0;
     meinFenster = new BrowserWindow( {
         width:600,
@@ -51,7 +51,7 @@ const starteApplikation = () => {
         movable:true,
         //transparent: true,
         frame:true,
-        icon: __dirname + '/assets/csv-icon.png',
+        icon:__dirname + '/assets/csv-icon.png',
         webPreferences:{
             nodeIntegration:true, //standard false
             contextIsolation:false,
@@ -76,10 +76,10 @@ app.on( 'active', starteApplikation )
 
 //+ MacOS
 
-ipcMain.on('closeApplication', () => {
+ipcMain.on( 'closeApplication', () => {
     app.quit(); //Beende Applikation
     shell.beep();
-})
+} )
 
 let devToolsMenu = () => {
     if ( DEVMODE ) return "'Dev-Tools', role:'toggleDevTools'";

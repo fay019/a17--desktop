@@ -39,23 +39,23 @@ document.addEventListener( 'drop', ( event ) => {
     }
 
     $.get( pathFiles[ 0 ], ( data ) => {
-        if ( $('table').length ) {
-            if ( confirm( 'Are you sure you want to delete existing table?') === true ){
+        if ( $( 'table' ).length ) {
+            if ( confirm( 'Are you sure you want to delete existing table?' ) === true ) {
                 confirmationNew = true;
-                $('table').remove();
+                $( 'table' ).remove();
                 tableConstructor();
             } else {
                 confirmationNew = false;
             }
-        }else {
-            console.log('1st time')
+        } else {
+            console.log( '1st time' )
             confirmationNew = true;
             tableConstructor();
         }
 
     } )
         .done( ( data ) => {
-            if (confirmationNew){
+            if ( confirmationNew ) {
                 $( '#file-name' ).html( "name: " + filleName[ 0 ] );
                 $( '#file-path' ).html( "path: " + pathFiles[ 0 ] );
                 $( '#file-size' ).html( sizeDisplay( filleSize[ 0 ] ) );
@@ -101,7 +101,9 @@ document.addEventListener( 'drop', ( event ) => {
                 }
                 $( "img[alt='delete']" ).on( 'click', ( e ) => {
                     $( e.target ).parent().parent().remove();
-                    editedDisplay( ()=>{exportCsv()})
+                    editedDisplay( () => {
+                        exportCsv()
+                    } )
                 } );
                 $( 'tr td' ).one( 'click', ( e ) => {
                     let $tag = $( e.target );
@@ -115,7 +117,9 @@ document.addEventListener( 'drop', ( event ) => {
                             tempValue1 = $tag.children().val();
                             $tag.children().remove();
                             $tag.html( tempValue1 );
-                            ( tempValue !== tempValue1 ) && (editedDisplay( ()=>{exportCsv()}))
+                            ( tempValue !== tempValue1 ) && ( editedDisplay( () => {
+                                exportCsv()
+                            } ) )
                         }
                     } )
                 } )
@@ -138,59 +142,59 @@ let sizeDisplay = ( bytes ) => {
 let tableConstructor = () => {
     $( '<table class="table table-striped table-dark table-hover"><thead><tbody>' ).appendTo( '#table' );
 }
-let editedDisplay = (cb) => {
+let editedDisplay = ( cb ) => {
     !edited && $( '<div id="export">export to CSV</div>' ).appendTo( '#file-infos' );
     edited = true;
     cb();
 }
-let exportCsv = ()=>{
-    $('#export').on('click', (e)=> {
-        console.log('export clicked ', e);
+let exportCsv = () => {
+    $( '#export' ).on( 'click', ( e ) => {
+        console.log( 'export clicked ', e );
         let header = [];
 
-        $("table thead tr th").each(function(i, v){
-            header[i] = $(this).text();
-        });
+        $( "table thead tr th" ).each( function ( i, v ) {
+            header[ i ] = $( this ).text();
+        } );
         header.pop();
 
         let data = [];
 
-        $("table tbody tr").each(function(i, v){
-            data[i] = [];
-            $(this).children().each(function(ii, vv){
-                data[i][ii] = $(this).text();
-            });
-            data[i].pop();
-        })
-        data.unshift(header);
-        let myJson = JSON.stringify(data);
+        $( "table tbody tr" ).each( function ( i, v ) {
+            data[ i ] = [];
+            $( this ).children().each( function ( ii, vv ) {
+                data[ i ][ ii ] = $( this ).text();
+            } );
+            data[ i ].pop();
+        } )
+        data.unshift( header );
+        let myJson = JSON.stringify( data );
         //myJson = myJson.substring(1, myJson.length-1)
-        console.log(myJson)
-        console.log(convertToCSV(myJson))
+        console.log( myJson )
+        console.log( convertToCSV( myJson ) )
 
-    });
+    } );
 };
 
-let convertToCSV = function (objArray) {
-    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+let convertToCSV = function ( objArray ) {
+    var array = typeof objArray != 'object' ? JSON.parse( objArray ) : objArray;
     var str = '';
 
-    for (var i = 0; i < array.length; i++) {
+    for ( var i = 0; i < array.length; i++ ) {
         var line = '';
-        for (var index in array[i]) {
-            if (line != '') line += ';'
+        for ( var index in array[ i ] ) {
+            if ( line != '' ) line += ';'
 
-            line += array[i][index];
+            line += array[ i ][ index ];
         }
 
         str += line + '\r\n';
     }
-    fs.writeFile('./datas/mycsvfile.csv', str, "utf8" ,err => {
-        if (err) {
-            console.error(err)
+    fs.writeFile( './datas/mycsvfile.csv', str, "utf8", err => {
+        if ( err ) {
+            console.error( err )
             return false;
         }
-        alert('new file has been created  mycsvfile.csv');
-    })
+        alert( 'new file has been created  mycsvfile.csv' );
+    } )
     return str;
 }

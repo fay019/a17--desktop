@@ -3,9 +3,11 @@ body {
     padding: 0;
     background-color: rgba(217, 211, 211, 0.84);
 }
+
 h1 {
     text-align: center;
 }
+
 #closeApp, #reloadApp {
     font-weight: bold;
     position: absolute;
@@ -14,6 +16,7 @@ h1 {
     cursor: pointer;
     z-index: 2;
 }
+
 #closeApp {
     color: red;
     right: 6px;
@@ -23,35 +26,42 @@ h1 {
     color: green;
     left: 6px;
 }
+
 #appName {
     position: absolute;
-    left:47%;
+    left: 47%;
     color: white;
     top: 6px;
 }
+
 #topNav {
-    height:30px;
-    width:100%;
-    background:black;
+    height: 30px;
+    width: 100%;
+    background: black;
     position: fixed;
     top: -2px;
     z-index: 1;
 }
+
 .container-fluid {
     margin: 30px 0 0 0;
-    padding:0;
+    padding: 0;
 }
+
 .table {
     width: 100%;
 }
+
 img {
     cursor: pointer;
     text-align: center;
 }
+
 img[alt='delete'] {
     filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
 }
-#export{
+
+#export {
     text-align: center;
     width: 140px;
     border-radius: 15px;
@@ -59,11 +69,12 @@ img[alt='delete'] {
     padding: 5px 0;
     font-weight: bold;
     cursor: pointer;
-    margin: 5px 0 ;
+    margin: 5px 0;
 }
+
 #export:hover {
     background-color: #0a58ca;
-    transform:scale(1.1,1.1);
-    -webkit-transform:scale(1.1,1.1);
-    -moz-transform:scale(1.1,1.1);
+    transform: scale(1.1, 1.1);
+    -webkit-transform: scale(1.1, 1.1);
+    -moz-transform: scale(1.1, 1.1);
 }
