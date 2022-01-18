@@ -4,6 +4,7 @@ const fs = require( 'fs' );
 const path = require( 'path' );
 const csv = require( 'jquery-csv' );
 let edited = false;
+let toExport = false;
 let confirmationNew = false;
 
 /////////////// App CTRL  ////////////////////
@@ -20,6 +21,9 @@ $( '#reloadApp' ).on( 'click', () => {
 /////////////// END App CTRL  ////////////////////
 
 
+/**
+ * Drop listener
+ */
 document.addEventListener( 'drop', ( event ) => {
     event.preventDefault();
     event.stopPropagation();
@@ -38,21 +42,20 @@ document.addEventListener( 'drop', ( event ) => {
         filleSize.push( f.size );
     }
 
-    $.get( pathFiles[ 0 ], ( data ) => {
-        if ( $( 'table' ).length ) {
+    $.get( pathFiles[ 0 ], () => {
+        let $table = $('table');
+        if ( $table.length ) {
             if ( confirm( 'Are you sure you want to delete existing table?' ) === true ) {
                 confirmationNew = true;
-                $( 'table' ).remove();
+                $table.remove();
                 tableConstructor();
             } else {
                 confirmationNew = false;
             }
         } else {
-            console.log( '1st time' )
             confirmationNew = true;
             tableConstructor();
         }
-
     } )
         .done( ( data ) => {
             if ( confirmationNew ) {
@@ -102,93 +105,89 @@ document.addEventListener( 'drop', ( event ) => {
                 $( "img[alt='delete']" ).on( 'click', ( e ) => {
                     $( e.target ).parent().parent().remove();
                     editedDisplay( () => {
-                        exportCsv()
+                        // exportCsv();
+                        toExport = true;
                     } )
                 } );
                 $( 'tr td' ).one( 'click', ( e ) => {
                     let $tag = $( e.target );
-                    let tempValue = $tag.text();
-                    let tempValue1;
-                    $tag.html( '' );
-                    $tag.append( `<input type="text" value="${tempValue}">` );
-                    $tag.children().focus();
-                    $( document ).on( 'click', ( event ) => {
-                        if ( $( event.target ).closest( $tag ).length === 0 ) {
-                            tempValue1 = $tag.children().val();
-                            $tag.children().remove();
-                            $tag.html( tempValue1 );
-                            ( tempValue !== tempValue1 ) && ( editedDisplay( () => {
-                                exportCsv()
-                            } ) )
-                        }
-                    } )
+                    if ( $tag.children().length <= 0 ) {
+                        let tempValue = $tag.text();
+                        let tempValue1;
+                        $tag.html( '' );
+                        $tag.append( `<input type="text" value="${tempValue}">` );
+                        $tag.children().focus();
+                        $( document ).on( 'click', ( event ) => {
+                            if ( $( event.target ).closest( $tag ).length === 0 ) {
+                                tempValue1 = $tag.children().val();
+                                $tag.children().remove();
+                                $tag.html( tempValue1 );
+                                ( tempValue !== tempValue1 ) && ( editedDisplay( () => {
+                                    // exportCsv();
+                                    toExport = true;
+                                } ) )
+                            }
+                        } )
+                    }
                 } )
             }
         } )
 } );
-
+/**
+ * Dragover Listener
+ */
 document.addEventListener( 'dragover', ( e ) => {
     e.preventDefault();
     e.stopPropagation();
 } );
 
-
+/**
+ * write beautiful document size in format kb mb..
+ * @param bytes {number}
+ * @return {string}
+ */
 let sizeDisplay = ( bytes ) => {
+    console.log('bytes: ', typeof bytes, bytes)
     let sizes = [ 'Bytes', 'KB', 'MB', 'GB', 'TB' ];
     if ( bytes === 0 ) return '0 Byte';
     let i = parseInt( Math.floor( Math.log( bytes ) / Math.log( 1024 ) ) );
     return "size: " + Math.round( bytes / Math.pow( 1024, i ), 2 ) + ' ' + sizes[ i ];
 }
+/**
+ * Table constructor
+ */
 let tableConstructor = () => {
     $( '<table class="table table-striped table-dark table-hover"><thead><tbody>' ).appendTo( '#table' );
+    toExport = false;
 }
+/**
+ * Add button export if the array is edited
+ * @param cb
+ */
 let editedDisplay = ( cb ) => {
-    !edited && $( '<div id="export">export to CSV</div>' ).appendTo( '#file-infos' );
+    !edited && $( '#export, #clear' ).css( 'display', 'inline-block' );
     edited = true;
     cb();
 }
-let exportCsv = () => {
-    $( '#export' ).on( 'click', ( e ) => {
-        console.log( 'export clicked ', e );
-        let header = [];
 
-        $( "table thead tr th" ).each( function ( i, v ) {
-            header[ i ] = $( this ).text();
-        } );
-        header.pop();
+/**
+ * convert data => string to object
+ * @param data {string}
+ * @return {string}
+ */
+let convertToCSV = function ( data ) {
+    let myObject = typeof data != 'object' ? JSON.parse( data ) : data;
+    let str = '';
 
-        let data = [];
-
-        $( "table tbody tr" ).each( function ( i, v ) {
-            data[ i ] = [];
-            $( this ).children().each( function ( ii, vv ) {
-                data[ i ][ ii ] = $( this ).text();
-            } );
-            data[ i ].pop();
-        } )
-        data.unshift( header );
-        let myJson = JSON.stringify( data );
-        //myJson = myJson.substring(1, myJson.length-1)
-        console.log( myJson )
-        console.log( convertToCSV( myJson ) )
-
-    } );
-};
-
-let convertToCSV = function ( objArray ) {
-    var array = typeof objArray != 'object' ? JSON.parse( objArray ) : objArray;
-    var str = '';
-
-    for ( var i = 0; i < array.length; i++ ) {
+    for ( var i = 0; i < myObject.length; i++ ) {
         var line = '';
-        for ( var index in array[ i ] ) {
-            if ( line != '' ) line += ';'
-
-            line += array[ i ][ index ];
+        for ( var index in myObject[ i ] ) {
+            if ( line !== '' ) line += ';'
+            line += myObject[ i ][ index ];
         }
-
         str += line + '\r\n';
     }
+    // in this time I write new file --- todo Ask Alex if I write the source file
     fs.writeFile( './datas/mycsvfile.csv', str, "utf8", err => {
         if ( err ) {
             console.error( err )
@@ -198,3 +197,51 @@ let convertToCSV = function ( objArray ) {
     } )
     return str;
 }
+
+/**
+ * export btn listener
+ *
+ */
+$( '#export' ).on( 'click', ( e ) => {
+    e.stopPropagation();
+    if ( toExport ) {
+        convertToCSV( readTable() );
+        toExport = false;
+    }
+} );
+
+/**
+ * read table and return json
+ * @return {string}
+ */
+let readTable = () => {
+    let header = [];
+    let data = [];
+    $( "table thead tr th" ).each( function ( i, v ) {
+        header[ i ] = $( this ).text();
+    } );
+    header.pop();
+    $( "table tbody tr" ).each( function ( i, v ) {
+        data[ i ] = [];
+        $( this ).children().each( function ( ii, vv ) {
+            data[ i ][ ii ] = $( this ).text();
+        } );
+        data[ i ].pop();
+    } )
+    data.unshift( header );
+    return JSON.stringify( data );
+}
+
+
+/**
+ * Clear listener
+ * remove table, hide btn and clear file infos
+ */
+$( '#clear' ).on( 'click', () => {
+    if ( confirm( 'Are you sure you want clear the screen?' ) === true ) {
+        $( 'table' ).remove();
+        $( '#export, #clear' ).css( 'display', 'none' );
+        $( '#file-name, #file-path, #file-size, #file-column, #file-row' ).html( '' );
+        edited = false;
+    }
+} )

@@ -39,11 +39,11 @@ let meinMenu = [
 const starteApplikation = () => {
     let factor = screen.getAllDisplays();
     myHeight = factor[ 1 ].size.height;
-    myWidth = 600;
+    myWidth = 1250;
     myX = factor[ 1 ].size.width - myWidth;
     myY = 0;
     meinFenster = new BrowserWindow( {
-        width:600,
+        width:1250,
         height:myHeight,
         x:myX,
         y:myY,
