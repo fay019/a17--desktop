@@ -1,7 +1,6 @@
 const { ipcRenderer, shell } = require( 'electron' );
 const $ = require( 'jquery' )
 const fs = require( 'fs' );
-const path = require( 'path' );
 const csv = require( 'jquery-csv' );
 const tablesorter = require( 'tablesorter' );
 let edited = false;
