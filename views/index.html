@@ -6,18 +6,22 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <title>Index</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <title>CSV-Editor</title>
 </head>
 <body>
 <!-- Top Application -->
 <div id="topNav">
-    <div id="reloadApp">R</div>
-    <div id="appName">CSV READER</div>
-    <div id="closeApp">X</div>
+    <div id="reloadApp">R-reload</div>
+    <div id="appName">CSV-EDITOR</div>
+    <div id="closeApp">Exit-X</div>
 </div>
 <!-- End top Application -->
 <div class="container-fluid">
-    <h1>Drop your documents wherever you want in the application</h1>
+    <div id="bg-drag-drop ">
+        <h3>Drop your documents wherever you want in the application</h3>
+        <span><img src="./icons/csv.svg" alt="CSV" id="csvImg"/></span>
+    </div>
     <div id="file-infos">
         <div id="file-name"></div>
         <div id="file-path"></div>
@@ -26,11 +30,13 @@
         <div id="file-row"></div>
         <div id="export">export to CSV</div>
         <div id="clear">Clear screen</div>
-
+    </div>
+    <div class="input-group d-none" id="search">
+        <input type="text" class="form-control" placeholder="Search Here" id="search-input">
+        <button type="submit" class="input-group-text btn-success" disabled><i class="bi bi-search me-2"></i></button>
     </div>
     <div id="table" class="table-responsive"></div>
 </div>
 <script src="js/script.js"></script>
-
 </body>
 </html>

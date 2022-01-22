@@ -1,11 +1,25 @@
+:root {
+    --bg-color: rgba(217, 211, 211, 0.84);
+}
+
 body {
     margin: 0;
     padding: 0;
-    background-color: rgba(217, 211, 211, 0.84);
+    background-color: var(--bg-color);
 }
 
-h1 {
+h3 {
     text-align: center;
+}
+
+#bg-drag-drop {
+    text-align: center;
+    margin: auto;
+    padding: 20px;
+    width: 90vw;
+    height: 90vh;
+    min-height: 300px;
+    border: 2px dashed #c4c4c4;
 }
 
 #closeApp, #reloadApp {
@@ -47,19 +61,24 @@ h1 {
     margin: 30px 0 0 0;
     padding: 0;
 }
+.readmePage p{
+    font-size: 1.3em;
+    padding: 0 30px;
+    margin-top: 25px;
+}
 
 .table {
     width: 100%;
 }
 
-img {
+thead th {
     cursor: pointer;
-    text-align: center;
 }
 
-img[alt='delete'] {
-    filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg) brightness(104%) contrast(97%);
+thead th:after {
+
 }
+
 
 #export {
     text-align: center;
@@ -76,11 +95,13 @@ img[alt='delete'] {
 #export:hover {
     background-color: #0a58ca;
 }
+
 #export:hover, #clear:hover {
     transform: scale(1.1, 1.1);
     -webkit-transform: scale(1.1, 1.1);
     -moz-transform: scale(1.1, 1.1);
 }
+
 #clear {
     text-align: center;
     width: 140px;
@@ -94,6 +115,54 @@ img[alt='delete'] {
     display: none;
     float: right;
 }
+
 #clear:hover {
     background-color: red;
+}
+
+/*------------- Search bar  ---------------*/
+#search {
+    width: 250px;
+    margin: 8px 0;
+}
+
+/*------------- End Search bar  ---------------*/
+
+/*------------- icons  ---------------*/
+.bi-trash {
+    color: red;
+    cursor: pointer;
+}
+
+#csvImg {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 128px;
+    height: 128px;
+}
+
+/*------------- End icons  ---------------*/
+.tablesorter-header {
+    background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+    background-position: center right;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    white-space: normal;
+    padding: 4px 20px 4px 4px;
+}
+
+.tablesorter-headerAsc {
+    background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAAP///////yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
+}
+
+.tablesorter-headerDesc {
+    background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAAP///////yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
+}
+
+.tablesorter .sorter-false {
+    background-image: none;
+    cursor: default;
+    padding: 4px;
 }

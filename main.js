@@ -4,9 +4,31 @@ const { app, BrowserWindow, screen, Menu, shell, ipcMain } = require( 'electron'
 // config
 let meinFenster;
 let myHeight, myWidth, myX, myY;
-const DEVMODE = true;
+const DEVMODE = false;
 
+/**
+ * User Menu
+ * @type {[{label: string, click: click},{label: string, click: click}]}
+ */
 let meinMenu = [
+    {
+        label:'CSV-editor', click:() => {
+            meinFenster.loadFile( 'views/index.html' ); // ???
+            shell.beep();
+        }
+    },
+    {
+        label:'Credit', click:() => {
+            meinFenster.loadFile( 'views/credit.html' );
+            shell.beep();
+        }
+    }
+];
+/**
+ * Dev Menu
+ * @type {[{submenu: [{label: string, click: click},{role: string, label: string}], label: string},{label: string, click: click},{label: string, click: click}]}
+ */
+let meinDevMenu = [
     {
         label:'Meine Applikation', submenu:[
             {
@@ -60,9 +82,13 @@ const starteApplikation = () => {
         //icon: __dirname
     } );
     meinFenster.loadFile( 'views/index.html' );
-    meinFenster.setAlwaysOnTop( true );
-    DEVMODE && meinFenster.webContents.openDevTools(); // auto open devtools
-    Menu.setApplicationMenu( Menu.buildFromTemplate( meinMenu ) );
+    if ( DEVMODE ) {
+        meinFenster.webContents.openDevTools(); // auto open devtools
+        Menu.setApplicationMenu( Menu.buildFromTemplate( meinDevMenu ) );
+        meinFenster.setAlwaysOnTop( true );
+    }else {
+        Menu.setApplicationMenu( Menu.buildFromTemplate( meinMenu ) );
+    }
 };
 
 
@@ -80,8 +106,3 @@ ipcMain.on( 'closeApplication', () => {
     app.quit(); //Beende Applikation
     shell.beep();
 } )
-
-let devToolsMenu = () => {
-    if ( DEVMODE ) return "'Dev-Tools', role:'toggleDevTools'";
-    return false;
-}
