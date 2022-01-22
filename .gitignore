@@ -1,3 +1,7 @@
 .idea
 node_modules
 package-lock.json
+dist
+datas12
+build-res
+electron-builder.json

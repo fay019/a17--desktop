@@ -162,6 +162,7 @@ let editedDisplay = ( cb ) => {
 let convertToCSV = function ( data ) {
     let str = '';
     let fileName = $( '#file-name' ).html();
+    let dir = './datas';
     for ( var i = 0; i < data.length; i++ ) {
         var line = '';
         for ( var index in data[ i ] ) {
@@ -170,7 +171,11 @@ let convertToCSV = function ( data ) {
         }
         str += line + '\r\n';
     }
+    if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
+    }
     fs.writeFile( `./datas/MOCK_DATA.csv`, str, "utf8", err => {
+
         if ( err ) {
             console.error( err )
             return false;

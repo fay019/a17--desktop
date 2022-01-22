@@ -1,19 +1,37 @@
 {
-  "name": "a17--desktop",
+  "name": "faycal_csv_editor",
   "version": "1.0.0",
-  "description": "",
+  "description": "Desktop application for CSV files editor",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "electron-packager . app --platform win32 --arch x64 --out dist/",
-    "setup": "electron-installer-windows --src dist/app-win32-x64/ --dest dist/installers/"
+    "setup": "electron-installer-windows --src dist/app-win32-x64/ --dest dist/installers/",
+    "postinstall": "electron-builder install-app-deps",
+    "pack": "electron-builder -w"
   },
-  "keywords": [],
+  "keywords": [
+    "csv",
+    "editor",
+    "file-editor"
+  ],
+  "build": {
+    "appId": "com.fay4.net"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fay019/a17--desktop.git"
+  },
   "author": "fAYCAL",
-  "license": "ISC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fay019/a17--desktop/issues"
+  },
+  "homepage": "https://github.com/fay019/a17--desktop#readme",
   "devDependencies": {
     "electron": "^16.0.7",
+    "electron-builder": "^22.14.5",
     "electron-installer-windows": "^3.0.0"
   },
   "dependencies": {
